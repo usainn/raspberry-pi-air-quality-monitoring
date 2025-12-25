@@ -14,22 +14,21 @@ void setup() {
   Serial.begin(9600);
   dht.begin();
 
-  // MQ sensorler icin analog pin ayari gerekmez
-  delay(2000); // DHT ilk okuma icin biraz beklesin
+ 
+  delay(2000); 
 }
 
 void loop() {
-  // 1 saniyede 1 veri gonder (DHT icin iyi)
+ 
   if (millis() - lastMs < 1000) return;
   lastMs = millis();
 
-  int mq2_raw = analogRead(MQ2_PIN);       // 0-1023
-  int mq135_raw = analogRead(MQ135_PIN);   // 0-1023
+  int mq2_raw = analogRead(MQ2_PIN);       
+  int mq135_raw = analogRead(MQ135_PIN);  
 
   float hum = dht.readHumidity();
-  float temp = dht.readTemperature(); // Celsius
-
-  // DHT bazen NAN dondurebilir, kontrol edelim
+  float temp = dht.readTemperature(); 
+  
   bool dht_ok = true;
   if (isnan(hum) || isnan(temp)) {
     dht_ok = false;
@@ -37,7 +36,7 @@ void loop() {
     temp = -1;
   }
 
-  // Tek satir JSON basiyoruz (Pi kolay parse etsin)
+  
   Serial.print("{\"mq2\":");
   Serial.print(mq2_raw);
   Serial.print(",\"mq135\":");
@@ -50,3 +49,4 @@ void loop() {
   Serial.print(dht_ok ? "true" : "false");
   Serial.println("}");
 }
+
